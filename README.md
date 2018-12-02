@@ -4,7 +4,7 @@ An app where a user can retrieve and comment on news articles.
 ## Goals
 This app attempts to achieve the following goals:
 * Scrape a news web page for articles using [Cheerio](https://www.npmjs.com/package/cheerio)
-* Display the news articles dynamically using [Handlebars](https://www.npmjs.com/package/express-handlebars)
+* Display the news articles dynamically using [Vue](https://www.vuejs.org)
 * Allow a user to comment on an article, and store said comments on a MongoDB database using [Mongoose](https://www.npmjs.com/package/mongoose)
 
 ## Other technologies used
