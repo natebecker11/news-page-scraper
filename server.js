@@ -1,29 +1,66 @@
-const app = require('express')
+const express = require('express')
+const path = require('path')
+const mongoose = require('mongoose')
+const axios = require('axios')
+const cheerio = require('cheerio')
+
+const db = require('./models')
+
+const app = express()
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
 app.use(express.static('./dist'))
 
-const path = require('path')
-const mongoose = require('mongoose')
-const axios = require('axios')
-const cheerio = require('cheerio')
+const databaseUrl = process.env.MONGODB_URI || 'mongodb://localhost/news-scraper'
+mongoose.connect(databaseUrl, { useNewUrlParser: true })
 
 
+// POST route for scraping CNN.com
+app.post('/api/scrape', (req, res) => {
+  axios.get('https://medium.com/topic/technology')
+    .then(response => {
+      console.log('hi1')
+      const $ = cheerio.load(response.data)
+      const payload = []
+      $('div.l.fm.q.s.fn').each(function(i, element) {         
+        let entry = {}
+        entry.title = $(this).children('.fr.c.fq').children('.dv.dw').children('h3').text()
+        entry.author = $(this).children('.fz.c').children('.o.s.cg').children('.c.fo').children('.s').children('.bj.b.bk.bl').children('a').text()
+        entry.description = $(this).children('.fr.c.fq').children('.dv.dw').children('.eb.c').children('p').children('a').text()
+        entry.link = `https://medium.com${$(this).children('.fr.c.fq').children('.dv.dw').children('h3').children('a').attr('href').slice(0, 15)}`
+        payload.push(entry)
+      })
+      return db.Article.insertMany(payload)
+    })
+    .then(articlesInserted => {
+      console.log(articlesInserted)
+      res.json({ scraped: true, error: false })
+    })
+    .catch(err => {
+      console.log(err)
+      res.json({ scraped: true, error: true })
+    })    
+})
 
-const databaseUrl = 'mongodb://localhost/news-scraper'
+// POST route for grabbing all articles from the DB
+app.post('/api/get/articles', (req, res) => {
+  db.Article.find({})
+    .then(dbArticle => {
+      res.json(dbArticle)
+    })
+    .catch(err => res.json(err))
+})
 
-if (process.env.MONGODB_URI) mongoose.connect(process.env.MONGODB_URI)
-else mongoose.connect(databaseUrl, { useNewUrlParser: true })
+// POST route for grabbing an article and populating with comments
 
+// POST route for saving a comment to an article
 
+// PUT route for updating a comment on an article
 
-const db = mongoose.connection
+// DELETE route for deleting a comment on an article
 
-db.on('error', err => console.error(`Mongoose Error: ${err}`))
-
-db.once('open', _ => console.log('Mongoose connection successful.'))
 
 
 app.get('*', (_, res) => {
