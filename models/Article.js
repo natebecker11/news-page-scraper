@@ -9,9 +9,18 @@ const ArticleSchema = new Schema({
     required: true
   },
 
+  author: {
+    type: String
+  },
+
+  description: {
+    type: String
+  },
+  
   link: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
 
   comment: {
