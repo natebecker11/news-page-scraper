@@ -119,6 +119,7 @@ export default new Vuex.Store({
     },
     setActiveArticle(state, articleId) {
       state.activeArticleId = articleId
+      console.log(this.state.activeArticleId)
     }
   },
   actions: {
