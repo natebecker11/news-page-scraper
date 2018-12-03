@@ -54,12 +54,45 @@ app.post('/api/get/articles', (req, res) => {
 })
 
 // POST route for grabbing an article and populating with comments
+app.post('/api/get/articles/:id', (req, res) => {
+  db.Article.findOne({ _id: req.params.id })
+    .populate('comment')
+    .then(dbArticle => res.json(dbArticle))
+    .catch(err => res.json(err))
+})
 
 // POST route for saving a comment to an article
+app.post('/api/post/articles/:id', (req, res) => {
+  db.Comment.create(req.body)
+    .then(dbComment => {
+      return db.Article.findOneAndUpdate(
+        { _id: req.params.id },
+        { $push: { comment: dbComment._id } },
+        { new: true }
+      )
+    })
+    .then(dbArticle => res.json(dbArticle))
+    .catch(err => res.json(err))
+})
 
 // PUT route for updating a comment on an article
+app.put('/api/put/comments/:id', (req, res) => {
+  db.Comment.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body
+  )
+  .then(dbComment => res.json(dbComment))
+  .catch(err => res.json(err))
+})
 
 // DELETE route for deleting a comment on an article
+app.delete('/api/delete/comments/:id', (req, res) => {
+  db.Comment.findOneAndDelete(
+    { _id: req.params.id }
+  )
+  .then(response => res.json(response))
+  .catch(err => res.json(err))
+})
 
 
 
