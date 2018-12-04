@@ -11,8 +11,21 @@
       <article-card  v-for='(article, i) in articles' :key='i' :article='article'></article-card>
 
     </section>
-    <section class="comments">
-
+    <!-- <section class="addcomment">
+      <form></form>
+    </section> -->
+    <section class="comments" v-if='activeArticle'>
+      <form>
+        <h3>Post Your Comment!</h3>
+        <label for="newCommentTitle"> Title
+          <input type="text" id='newCommentTitle'>
+        </label>
+        <label for="newCommentBody"> Comment
+          <textarea id="newCommentBody" cols="30" rows="10"></textarea>
+        </label>
+        <button>Add Comment</button>
+      </form>
+      <comment-card v-for='(comment, i) in comments' :key='i' :comment='comment'></comment-card>
     </section>
     <footer class="footer">
       <p>Copyright 2018 <a href='http://natebecker11.com' target='_blank'>Nate Becker</a></p>
@@ -23,6 +36,7 @@
 
 <script>
 import articleCard from '../components/ArticleCard'
+import commentCard from '../components/CommentCard'
 export default {
   computed: {
     articles() {
@@ -36,7 +50,8 @@ export default {
     }
   },
   components: {
-    articleCard
+    articleCard,
+    commentCard
   }
 }
 </script>
@@ -51,7 +66,6 @@ export default {
     grid-gap: '20px';
     grid-template-areas: 
       'header header'
-      'articles addcomment'
       'articles comments'
       'articles comments'
       'footer footer';
@@ -67,6 +81,7 @@ export default {
 
   .comments {
     grid-area: comments;
+    align-self: start;
   }
 
   .addcomment {
@@ -75,5 +90,9 @@ export default {
 
   .footer {
     grid-area: footer;
+  }
+
+  input, textarea {
+    display: block;
   }
 </style>

@@ -102,7 +102,16 @@ export default new Vuex.Store({
           "__v": 0
       }
   ],
-    currentComments: [],
+    currentComments: [
+      {
+        "title": "Hey brosef",
+        "body": "Hey broooosef"
+      },
+      {
+        "title": "Wubba",
+        "body": "dubba lubba"
+      }
+    ],
     activeArticleId: ''
   },
   getters: {
@@ -119,7 +128,6 @@ export default new Vuex.Store({
     },
     setActiveArticle(state, articleId) {
       state.activeArticleId = articleId
-      console.log(this.state.activeArticleId)
     }
   },
   actions: {
