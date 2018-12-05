@@ -145,6 +145,13 @@ export default new Vuex.Store({
         .then(response => {
           console.log(response)
         })
+    },
+
+    postComment(articleId, newComment) {
+      return axios.post(`/api/post/articles/${articleId}`, newComment)
+        .then(response => {
+          console.log(response)
+        })
     }
   }
 })
