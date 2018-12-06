@@ -22,7 +22,9 @@ export default new Vuex.Store({
     fetching: false
   },
   getters: {
-    getCurrentArticles: state => state.currentArticles,
+    getCurrentArticles: state => {
+      return state.currentArticles.slice().reverse()
+    },
     getCurrentComments: state => {
       return state.currentComments.slice().reverse()
     },
