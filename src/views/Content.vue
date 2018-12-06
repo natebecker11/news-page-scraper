@@ -1,8 +1,8 @@
 <template>
   <div class='main-grid'>
     <section class='header'>
-      <h1>News Page Scraper</h1>
-      <h2>All The News That's Fit To Scrape</h2>
+      <h1>Medium.com Technology Section</h1>
+      <h2>Here Are The Latest Articles</h2>
     </section>
     <section class="articles">
       <!-- <div v-for='(article, i) in articles' :key='i'>
@@ -95,6 +95,12 @@ export default {
 
   .header {
     grid-area: header;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #3d2654;
+    margin: 5px;
+    padding: 5px;
+    color: #F6F930;
   }
 
   .articles {
@@ -103,7 +109,12 @@ export default {
 
   .comments {
     grid-area: comments;
-    align-self: start;
+    align-self: start;    
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: aliceblue;
+    margin: 5px;
+    padding: 5px;
   }
 
   .addcomment {
@@ -116,5 +127,6 @@ export default {
 
   input, textarea {
     display: block;
+    margin: 5px auto;
   }
 </style>

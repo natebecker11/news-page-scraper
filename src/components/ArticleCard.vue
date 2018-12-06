@@ -23,3 +23,12 @@ export default {
 }
 </script>
 
+<style scoped>
+  div {
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: aliceblue;
+    margin: 5px;
+    padding: 5px;
+  }
+</style>
