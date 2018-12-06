@@ -18,12 +18,12 @@
       <form>
         <h3>Post Your Comment!</h3>
         <label for="newCommentTitle"> Title
-          <input type="text" id='newCommentTitle' v-model='newCommentTitle'>
+          <input type="text" id='newCommentTitle' v-model='title'>
         </label>
         <label for="newCommentBody"> Comment
-          <textarea id="newCommentBody" cols="30" rows="10" v-model='newCommentBody'></textarea>
+          <textarea id="newCommentBody" cols="30" rows="10" v-model='body'></textarea>
         </label>
-        <button @click='postComment'>Add Comment</button>
+        <button @click='postComment({ id: activeArticle, postedComment: {title, body} }).then(resetForm)'>Add Comment</button>
       </form>
       <comment-card v-for='(comment, i) in comments' :key='i' :comment='comment'></comment-card>
     </section>
@@ -42,8 +42,8 @@ import { mapActions } from 'vuex'
 export default {
   data() {
     return {
-      newCommentTitle: '',
-      newCommentBody: ''
+      title: '',
+      body: '',
     }
   },
   computed: {
@@ -55,16 +55,21 @@ export default {
     },
     activeArticle() {
       return this.$store.getters.getActiveArticleId
-    }
+    },
+    // postedComment() {
+    //   return this.newComment
+    // }
   },
   methods: {
-    postComment() {
-      return true
-    },
     ...mapActions([
       'postComment',
-      'fetchArticles'
-    ])
+      'fetchArticles',
+      'selectArticle'
+    ]),
+    resetForm(success) {      
+      this.title = ''
+      this.body = ''      
+    }
   },
   components: {
     articleCard,

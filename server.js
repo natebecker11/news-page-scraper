@@ -21,16 +21,18 @@ mongoose.connect(databaseUrl, { useNewUrlParser: true })
 app.post('/api/scrape', (req, res) => {
   axios.get('https://medium.com/topic/technology')
     .then(response => {
-      console.log('hi1')
+      // console.log('hi1')
       const $ = cheerio.load(response.data)
       const payload = []
       $('div.l.fm.q.s.fn').each(function(i, element) {         
+        // console.log($(this).children('.fz.c').children('.o.s.cg').children('.c.fo').children('.s').children('.bj.b.bk.bl').children('a').text())
         let entry = {}
         entry.title = $(this).children('.fr.c.fq').children('.dv.dw').children('h3').text()
         entry.author = $(this).children('.fz.c').children('.o.s.cg').children('.c.fo').children('.s').children('.bj.b.bk.bl').children('a').text()
         entry.description = $(this).children('.fr.c.fq').children('.dv.dw').children('.eb.c').children('p').children('a').text()
         entry.link = `https://medium.com${$(this).children('.fr.c.fq').children('.dv.dw').children('h3').children('a').attr('href').slice(0, 15)}`
         payload.push(entry)
+        // console.log(entry)
       })
       return db.Article.insertMany(payload)
     })
@@ -63,15 +65,21 @@ app.post('/api/get/articles/:id', (req, res) => {
 
 // POST route for saving a comment to an article
 app.post('/api/post/articles/:id', (req, res) => {
+  console.log(req.body)
   db.Comment.create(req.body)
     .then(dbComment => {
+      console.log(dbComment)
+      console.log(req)
       return db.Article.findOneAndUpdate(
         { _id: req.params.id },
         { $push: { comment: dbComment._id } },
         { new: true }
       )
     })
-    .then(dbArticle => res.json(dbArticle))
+    .then(dbArticle => {
+      console.log(dbArticle)
+      return res.json(dbArticle)
+    })
     .catch(err => res.json(err))
 })
 
